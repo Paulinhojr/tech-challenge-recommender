@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+
+# Ruff
+.ruff_cache/
+
+# VS Code History
+.history/
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db

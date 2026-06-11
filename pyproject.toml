@@ -1,0 +1,28 @@
+[project]
+name = "tech-challenge-recommender"
+version = "0.1.0"
+description = "Sistema de recomendação de produtos com PyTorch"
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "pandas",
+    "scikit-learn",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "I",
+    "N",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.6.0",
+]
