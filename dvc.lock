@@ -1,0 +1,88 @@
+schema: '2.0'
+stages:
+  executar_pipeline:
+    cmd: python src/recommender/main.py
+    deps:
+    - path: src/recommender
+      hash: md5
+      md5: e39c4d86e25396b85448e729324e92d9.dir
+      size: 8698
+      nfiles: 27
+  preprocess:
+    cmd: python src/recommender/preprocessing/preprocess.py
+    deps:
+    - path: data/MovieLens 100k/ml-latest-small/ratings.csv
+      hash: md5
+      md5: 325a6f09399d1c45671f187505e1a100
+      size: 2483723
+      isexec: true
+    - path: src/recommender/preprocessing/preprocess.py
+      hash: md5
+      md5: 943efbc198f32cfa5783dc62b5424d46
+      size: 2363
+      isexec: true
+    outs:
+    - path: data/processed/ratings_cleaned.csv
+      hash: md5
+      md5: 51119fbd8de5b0618024da1c4a7c3032
+      size: 2153982
+  feature_eng:
+    cmd: python src/recommender/preprocessing/feature_eng.py
+    deps:
+    - path: data/processed/ratings_cleaned.csv
+      hash: md5
+      md5: 51119fbd8de5b0618024da1c4a7c3032
+      size: 2153982
+    - path: src/recommender/preprocessing/
+      hash: md5
+      md5: 70c6403cdbcdfe23e9d776af48e85f7b.dir
+      size: 3901
+      nfiles: 5
+    outs:
+    - path: data/processed/features.csv
+      hash: md5
+      md5: 463ef1496fd4d415d79d7d370dde8723
+      size: 2355660
+  train:
+    cmd: python src/recommender/training/train.py
+    deps:
+    - path: data/processed/features.csv
+      hash: md5
+      md5: 463ef1496fd4d415d79d7d370dde8723
+      size: 2355660
+    - path: src/recommender/models/
+      hash: md5
+      md5: c27a6def0c1f80c42404fd3e32e896b5.dir
+      size: 4057
+      nfiles: 8
+    - path: src/recommender/training/
+      hash: md5
+      md5: 0dee17caf277f32431657dc9cdb65c94.dir
+      size: 1978
+      nfiles: 3
+    outs:
+    - path: artifacts/model.pt
+      hash: md5
+      md5: 79de65b218e779a8a43bff12fe7bcf37
+      size: 59
+  evaluate:
+    cmd: python src/recommender/evaluation/evaluate.py
+    deps:
+    - path: artifacts/model.pt
+      hash: md5
+      md5: 79de65b218e779a8a43bff12fe7bcf37
+      size: 59
+    - path: data/processed/features.csv
+      hash: md5
+      md5: 463ef1496fd4d415d79d7d370dde8723
+      size: 2355660
+    - path: src/recommender/evaluation/
+      hash: md5
+      md5: 8ad1831914541d1e726fb6bb66f320dc.dir
+      size: 1216
+      nfiles: 2
+    outs:
+    - path: artifacts/metrics.json
+      hash: md5
+      md5: 098d5343ff1b8b73ee8057bc00e7b214
+      size: 145

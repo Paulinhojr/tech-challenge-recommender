@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+
+# Ruff / Tests
+.ruff_cache/
+.pytest_cache/
+
+# Environment
+.env
+
+# MLflow local files
+mlruns/
+mlflow.db
+
+# DVC local files
+.dvc/cache/
+.dvc/tmp/
+dvc_remote/
+
+# Generated artifacts
+artifacts/*
+!artifacts/.gitignore
+
+# Processed data
+data/processed/*
+!data/processed/.gitignore
+
+# OS
+.DS_Store
+Thumbs.db

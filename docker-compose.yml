@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # Servidor do MLflow
+  mlflow:
+    image: python:3.11-slim
+    container_name: mlflow_server
+    working_dir: /mlflow
+    command: bash -c "pip install 'mlflow>=3.0.0' && mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./artifacts"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./mlflow.db:/mlflow/mlflow.db
+      - ./artifacts:/mlflow/artifacts
+
+  # Aplicação Principal (Pipelines e Treino)
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: recommendation_pipeline
+    depends_on:
+      - mlflow
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    volumes:
+      - .:/app

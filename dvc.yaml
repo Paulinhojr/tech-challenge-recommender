@@ -1,0 +1,35 @@
+stages:
+  preprocess:
+    cmd: python src/recommender/preprocessing/preprocess.py
+    deps:
+      - data/MovieLens 100k/ml-latest-small/ratings.csv
+      - src/recommender/preprocessing/preprocess.py
+    outs:
+      - data/processed/ratings_cleaned.csv
+
+  feature_eng:
+    cmd: python src/recommender/preprocessing/feature_eng.py
+    deps:
+      - data/processed/ratings_cleaned.csv
+      - src/recommender/preprocessing/
+    outs:
+      - data/processed/features.csv
+
+  train:
+    cmd: python src/recommender/training/train.py
+    deps:
+      - data/processed/features.csv
+      - src/recommender/training/
+      - src/recommender/models/
+    outs:
+      - artifacts/model.pt
+
+  evaluate:
+    cmd: python src/recommender/evaluation/evaluate.py
+    deps:
+      - artifacts/model.pt
+      - data/processed/features.csv
+      - src/recommender/evaluation/
+    metrics:
+      - artifacts/metrics.json:
+          cache: false
